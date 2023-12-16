@@ -5,6 +5,7 @@ import argparse
 import matplotlib.pyplot as plt
 from collections import Counter
 import matplotlib.colors as mcolors
+import numpy as np
 
 
 def parse_arguments():
@@ -67,6 +68,8 @@ def plot_image_counts(image_counts, title, save_path):
 
 def main():
     args = parse_arguments()
+    random.seed(42)
+    np.random.seed(42)
 
     image_folder = args.image_folder
     label_folder = args.label_folder

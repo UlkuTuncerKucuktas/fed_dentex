@@ -4,6 +4,7 @@ import random
 import argparse
 import matplotlib.pyplot as plt
 from collections import Counter
+import numpy as np
 
 def parse_arguments():
     parser = argparse.ArgumentParser(description='Split dataset into training and validation sets and analyze class distribution.')
@@ -93,6 +94,8 @@ def find_images_with_label(label_folder, label_to_find):
 
 def main():
     args = parse_arguments()
+    random.seed(42)
+    np.random.seed(42)
 
     # Initial setup
     image_folder = args.image_folder
