@@ -55,7 +55,7 @@ def main():
     # Disable WandB
     os.environ['WANDB_DISABLED'] = 'true'
     temp_dir = '/content/runs'
-    metrics = {'map50': [], 'precision': [], 'recall': []}
+    metrics = {'map50': [], 'precision': [], 'recall': [],'map_50_95': []}
 
     model = YOLO(args.config).load(args.model)
 
@@ -84,8 +84,9 @@ def main():
         
         eval_results = evaluate_model(ensemble_model_params, args.train_splits[0],args.config)
         metrics['map50'].append(eval_results['map50'])
-        #metrics['precision'].append(eval_results['precision'])
-        #metrics['recall'].append(eval_results['recall'])
+        metrics['map_50_95'].append(eval_results['map_50_95'])
+        metrics['precision'].append(eval_results['precision'])
+        metrics['recall'].append(eval_results['recall'])
         
 
         gc.collect()
