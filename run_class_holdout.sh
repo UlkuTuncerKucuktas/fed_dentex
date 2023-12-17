@@ -1,1 +1,1 @@
-python3 create_dataset_class_holdout.py --image_folder ./dentex_multi/images --label_folder ./dentex_multi/labels --dest_base_path ./dentex_split --train_split 0.9 --additional_splits 0.33 0.33 0.33 --target_class 2
+python3 create_dataset_class_holdout.py --image_folder ./dentex_multi/images --label_folder ./dentex_multi/labels --dest_base_path ./dentex_split --train_split 0.9 --additional_splits 0.31 0.33 0.34 --target_class 2

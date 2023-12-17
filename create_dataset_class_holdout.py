@@ -121,8 +121,8 @@ def main():
 
     # Move images for the first split
     target_images = find_images_with_label(temp_train_label_folder, args.target_class)
-    first_split_image_folder = os.path.join(dest_base_path, 'split_1/images')
-    first_split_label_folder = os.path.join(dest_base_path, 'split_1/labels')
+    first_split_image_folder = os.path.join(dest_base_path, 'holdout/images')
+    first_split_label_folder = os.path.join(dest_base_path, 'holdout/labels')
     create_split_selected(temp_train_image_folder, first_split_image_folder, target_images)
     create_split_selected(temp_train_label_folder, first_split_label_folder, {f.replace('.png', '.txt') for f in target_images})
 
@@ -157,10 +157,10 @@ def main():
     image_counts['val'] = val_image_count
 
     # Analyze the first split (split_1)
-    first_split_label_folder = os.path.join(dest_base_path, 'split_1/labels')
+    first_split_label_folder = os.path.join(dest_base_path, 'holdout/labels')
     split_1_class_counts, split_1_image_count = parse_labels(first_split_label_folder)
-    splits_info['split_1'] = split_1_class_counts
-    image_counts['split_1'] = split_1_image_count
+    splits_info['holdout'] = split_1_class_counts
+    image_counts['holdout'] = split_1_image_count
 
     # Analyze additional splits
     for split_ratio in args.additional_splits:
