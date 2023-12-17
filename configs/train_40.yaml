@@ -1,0 +1,11 @@
+# Train/val/test sets
+train: '/content/fed_dentex/dentex_split/train_40'
+val: '/content/fed_dentex/dentex_split/val'
+test: '/content/fed_dentex/dentex_split/val'
+
+# Classes
+names:
+  0: Impacted
+  1: Caries
+  2: Periapical Lesion
+  3: Deep Caries
