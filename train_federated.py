@@ -19,6 +19,15 @@ def parse_arguments():
     parser.add_argument('--weighted_avg', action='store_true', help='Use weighted averaging based on validation performance')
     return parser.parse_args()
 
+
+def delete_weights_folders(directory):
+    for root, dirs, files in os.walk(directory, topdown=False):
+        for name in dirs:
+            if name == 'weights':
+                weights_folder_path = os.path.join(root, name)
+                print(f"Deleting folder: {weights_folder_path}")
+                shutil.rmtree(weights_folder_path)
+
 def average_models(models):
     model_params = [model.model.state_dict() for model in models]
     averaged_params = {}
@@ -54,10 +63,12 @@ def main():
 
     # Disable WandB
     os.environ['WANDB_DISABLED'] = 'true'
-    temp_dir = '/content/runs'
+    temp_dir = '/content/fed_dentex/runs'
     metrics = {'map50': [], 'precision': [], 'recall': [],'map_50_95': []}
 
     model = YOLO(args.config).load(args.model)
+
+    best_map = 0
 
     for comm_round in range(args.num_comm):
         print("-----------------------------------------------------------------------------")
@@ -73,7 +84,7 @@ def main():
             dup_model.zero_grad()
 
             if os.path.exists(temp_dir):
-                shutil.rmtree(temp_dir)
+                delete_weights_folders(temp_dir)
 
 
         ensemble_model_params = average_models(models)
@@ -81,12 +92,17 @@ def main():
         model.model.load_state_dict(ensemble_model_params)
 
         # Evaluate the averaged model
-        
+        print("Evaluate " , comm_round , "ROUND" , "------------------------------------------")
         eval_results = evaluate_model(ensemble_model_params, args.train_splits[0],args.config)
         metrics['map50'].append(eval_results['map50'])
         metrics['map_50_95'].append(eval_results['map_50_95'])
         metrics['precision'].append(eval_results['precision'])
         metrics['recall'].append(eval_results['recall'])
+
+        if eval_results['map50'] > best_map:
+          best_map = eval_results['map50']
+          torch.save(model, '/content/drive/MyDrive/federated_results/best.pt')
+
         
 
         gc.collect()
