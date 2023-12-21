@@ -147,6 +147,20 @@ def main():
     splits_info = {}
     image_counts = {}
 
+    temp_val_folder = os.path.join(dest_base_path, 'temp_val')
+    os.makedirs(temp_val_folder, exist_ok=True)
+    temp_val_image_folder = os.path.join(temp_val_folder, 'images')
+    temp_val_label_folder = os.path.join(temp_val_folder, 'labels')
+    shutil.copytree(val_image_folder, temp_val_image_folder)
+    shutil.copytree(val_label_folder, temp_val_label_folder)
+
+    for i in range(len(args.additional_splits)+1):
+        num_to_select = val_count // (len(args.additional_splits) + 1)
+        additional_val_image_folder = os.path.join(dest_base_path, f'val_{i+1}/images')
+        additional_val_label_folder = os.path.join(dest_base_path, f'val_{i+1}/labels')
+        create_split(temp_val_image_folder, temp_val_label_folder, additional_val_image_folder, additional_val_label_folder, num_to_select)
+
+
     # Analyze main train and validation sets
     train_class_counts, train_image_count = parse_labels(train_label_folder)
     val_class_counts, val_image_count = parse_labels(val_label_folder)
@@ -163,13 +177,21 @@ def main():
     image_counts['holdout'] = split_1_image_count
 
     # Analyze additional splits
-    for split_ratio in args.additional_splits:
+    for i,split_ratio in enumerate(args.additional_splits):
         split_name = f'train_{int(split_ratio * 100)}'
         additional_train_label_folder = os.path.join(dest_base_path, f'{split_name}/labels')
         split_class_counts, split_image_count = parse_labels(additional_train_label_folder)
 
         splits_info[split_name] = split_class_counts
         image_counts[split_name] = split_image_count
+
+    for i in range(len(args.additional_splits) + 1):
+      val_split_name = f'val_{i+1}'
+      additional_val_label_folder = os.path.join(dest_base_path, f'{val_split_name}/labels')
+      val_split_class_counts, val_split_image_count = parse_labels(additional_val_label_folder)
+
+      splits_info[val_split_name] = val_split_class_counts
+      image_counts[val_split_name] = val_split_image_count
 
     # Define color map for class distribution plots
     color_map = {
