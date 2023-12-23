@@ -1,1 +1,1 @@
-python train_central.py --config './configs/yolov8x.yaml' --model 'yolov8x.pt' --epochs 2 --batch 8 --train_data './configs/central.yaml' --save_name 'central_train' --val_data './configs/train_15.yaml' './configs/train_20.yaml' './configs/train_25.yaml' './configs/train_40.yaml'
+python train_central.py --config './configs/yolov8x.yaml' --model 'yolov8x.pt' --epochs 50 --batch 8 --train_data './configs/central.yaml' --save_name 'central_train' --val_data './configs/train_15.yaml' './configs/train_20.yaml' './configs/train_25.yaml' './configs/train_40.yaml'
