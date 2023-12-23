@@ -1,7 +1,7 @@
 # Train/val/test sets
 train: '/content/fed_dentex/dentex_split/train_15'
-val: '/content/fed_dentex/dentex_split/val'
-test: '/content/fed_dentex/dentex_split/val'
+val: '/content/fed_dentex/dentex_split/val_1'
+test: '/content/fed_dentex/dentex_split/val_1'
 
 # Classes
 names:
