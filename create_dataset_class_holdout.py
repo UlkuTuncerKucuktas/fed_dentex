@@ -101,6 +101,15 @@ def main():
     image_folder = args.image_folder
     label_folder = args.label_folder
     dest_base_path = args.dest_base_path
+    
+    image_folder_temp =  os.path.split(image_folder)[0] + '_temp'
+    dest_base_path = args.dest_base_path
+    
+    shutil.copytree(os.path.split(image_folder)[0], image_folder_temp)
+
+    image_folder = image_folder_temp + '/images'
+    label_folder = image_folder_temp + '/labels'
+
     total_images = len(os.listdir(image_folder))
     train_count = int(total_images * args.train_split)
     val_count = total_images - train_count
@@ -159,7 +168,7 @@ def main():
         additional_val_image_folder = os.path.join(dest_base_path, f'val_{i+1}/images')
         additional_val_label_folder = os.path.join(dest_base_path, f'val_{i+1}/labels')
         create_split(temp_val_image_folder, temp_val_label_folder, additional_val_image_folder, additional_val_label_folder, num_to_select)
-
+    shutil.rmtree(temp_val_folder)
 
     # Analyze main train and validation sets
     train_class_counts, train_image_count = parse_labels(train_label_folder)
@@ -207,6 +216,9 @@ def main():
 
     # Plotting image counts in each split
     plot_image_counts(image_counts, 'Image Counts in Each Split', os.path.join(dest_base_path, 'split_image_counts.png'))
+
+    shutil.rmtree(os.path.split(image_folder)[0])
+    
 
 if __name__ == "__main__":
     main()

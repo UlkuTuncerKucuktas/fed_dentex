@@ -67,7 +67,14 @@ def main():
 
     image_folder = args.image_folder
     label_folder = args.label_folder
+
+    image_folder_temp =  os.path.split(image_folder)[0] + '_temp'
     dest_base_path = args.dest_base_path
+    
+    shutil.copytree(os.path.split(image_folder)[0], image_folder_temp)
+
+    image_folder = image_folder_temp + '/images'
+    label_folder = image_folder_temp + '/labels'
 
     total_images = len(os.listdir(image_folder))
     train_count = int(total_images * args.train_split)
@@ -155,6 +162,9 @@ def main():
         plot_class_distribution(class_counts, f'{split} Class Distribution', os.path.join(dest_base_path, f'{split}_class_distribution.png'), color_map)
 
     plot_image_counts(image_counts, 'Image Counts in Each Split', os.path.join(dest_base_path, 'split_image_counts.png'))
+
+    shutil.rmtree(os.path.split(image_folder)[0])
+
 
 if __name__ == "__main__":
     main()
